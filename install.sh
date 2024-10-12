@@ -5,7 +5,18 @@
 set -e
 
 if ! command -v unzip >/dev/null && ! command -v 7z >/dev/null; then
-	echo "Error: either unzip or 7z is required to install Deno (see: https://github.com/denoland/deno_install#either-unzip-or-7z-is-required )." 1>&2
+ 	case "$(uname)" in
+    	Darwin)
+     		# MacOS supports unzip natively and brew installs it as keg only, not ideal
+      		echo "Please install p7zip via Homebrew (brew install p7zip)" >&2
+     	 	;;
+    	Linux)
+      		echo "Please install unzip or p7zip using your distribution's package manager." >&2
+      		;;
+    	*)
+      		echo "Please install unzip or 7-zip. (see: https://github.com/denoland/deno_install#either-unzip-or-7z-is-required )" >&2
+      		;;
+  	esac
 	exit 1
 fi
 
